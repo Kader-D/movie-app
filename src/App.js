@@ -1,77 +1,34 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import FilmList from './FilmList';
-import Filter from './Filter';
-import { Container, Button, Form } from 'react-bootstrap';
+import FilmDetail from './FilmDetail';
+import AddFilm from './AddFilm';
 
 function App() {
-  const [films, setFilms] = useState([]);
-  const [titleFilter, setTitleFilter] = useState('');
-  const [ratingFilter, setRatingFilter] = useState('');
-  const [newFilm, setNewFilm] = useState({
-    title: '',
-    description: '',
-    posterUrl: '',
-    rating: '',
-  });
+  const [films, setFilms] = useState([
+    {
+      id: 1,
+      title: "Film 1",
+      description: "Description du Film 1",
+      posterUrl: "url_to_poster1",
+      rating: 4.5,
+      trailerLink: "https://www.youtube.com/embed/xyz"
+    },
+    // Ajoutez d'autres films ici
+  ]);
 
-  const handleAddFilm = () => {
+  const addFilm = (newFilm) => {
     setFilms([...films, newFilm]);
-    setNewFilm({ title: '', description: '', posterUrl: '', rating: '' });
   };
 
-  const filteredFilms = films.filter((film) => 
-    film.title.toLowerCase().includes(titleFilter.toLowerCase()) &&
-    (ratingFilter === '' || film.rating >= ratingFilter)
-  );
-
   return (
-    <Container>
-      <h1>Movie App</h1>
-      <Filter
-        titleFilter={titleFilter}
-        ratingFilter={ratingFilter}
-        setTitleFilter={setTitleFilter}
-        setRatingFilter={setRatingFilter}
-      />
-      <div style={{ margin: '20px 0' }}>
-        <Form>
-          <Form.Group>
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              value={newFilm.title}
-              onChange={(e) => setNewFilm({ ...newFilm, title: e.target.value })}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              value={newFilm.description}
-              onChange={(e) => setNewFilm({ ...newFilm, description: e.target.value })}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Poster URL</Form.Label>
-            <Form.Control
-              type="text"
-              value={newFilm.posterUrl}
-              onChange={(e) => setNewFilm({ ...newFilm, posterUrl: e.target.value })}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Rating</Form.Label>
-            <Form.Control
-              type="number"
-              value={newFilm.rating}
-              onChange={(e) => setNewFilm({ ...newFilm, rating: e.target.value })}
-            />
-          </Form.Group>
-          <Button onClick={handleAddFilm}>Add Film</Button>
-        </Form>
-      </div>
-      <FilmList films={filteredFilms} />
-    </Container>
+    <Router>
+      <Routes>
+        <Route path="/" element={<FilmList films={films} />} />
+        <Route path="/film/:id" element={<FilmDetail films={films} />} />
+        <Route path="/add" element={<AddFilm addFilm={addFilm} />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,14 +1,17 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-const FilmCard = ({ title, description, posterUrl, rating }) => {
+const FilmCard = ({ film }) => {
   return (
-    <Card style={{ width: '18rem', margin: '10px' }}>
-      <Card.Img variant="top" src={posterUrl} />
+    <Card style={{ width: '18rem' }}>
+      <Card.Img variant="top" src={film.posterUrl} alt={film.title} />
       <Card.Body>
-        <Card.Title>{title}</Card.Title>
-        <Card.Text>{description}</Card.Text>
-        <Card.Text>Rating: {rating}</Card.Text>
+        <Card.Title>{film.title}</Card.Title>
+        <Card.Text>Note: {film.rating}</Card.Text>
+        <Link to={`/film/${film.id}`}>
+          <Button variant="primary">Voir la description</Button>
+        </Link>
       </Card.Body>
     </Card>
   );
